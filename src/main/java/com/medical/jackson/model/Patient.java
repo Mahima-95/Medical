@@ -1,10 +1,11 @@
 package com.medical.jackson.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 import com.medical.jackson.model.common.Persistable;
 
-public class Patient implements Persistable {
+public class Patient implements Persistable,Serializable {
 
 	private String pId;
 	private String name;

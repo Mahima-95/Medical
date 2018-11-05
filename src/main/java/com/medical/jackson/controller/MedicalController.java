@@ -38,6 +38,10 @@ public class MedicalController {
 		return medicalService.getAllPatients();
 	}
 
+	@RequestMapping("/getAllPatients1")
+	public Patient[] getAllPatients1() {
+		return medicalService.getAllPatients1();
+	}
 	/*
 	 * @RequestMapping("/getDoctor/{dId}") public Doctor getDoctor(@PathVariable
 	 * String dId){ return doctorService.getDoctor(dId); }

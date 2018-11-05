@@ -25,6 +25,11 @@ public class MedicalService {
 		
 		return (Patient) medicalRepository.getAllMedicals();
 	}
+	
+public Patient[] getAllPatients1() {
+		
+		return medicalRepository.getAllMedicals1(Patient[].class);
+	}
 
 	/*
 	 * public Doctor getDoctor(String doctorId) {
