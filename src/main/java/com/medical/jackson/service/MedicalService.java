@@ -26,6 +26,7 @@ public class MedicalService {
 		return medicalRepository.addMedical(patient);
 	}
 
+	// normal method of add Patient
 	public List<Patient> addAllPatients(List<Patient> patients) {
 
 		return medicalRepository.addAllPatients(patients);
@@ -34,9 +35,15 @@ public class MedicalService {
 	public List<Patient> addAllPatientsInAppendMode(List<Patient> patients) {
 
 		List<Patient> patientNewList = new ArrayList<>();
-		patientNewList.addAll(Arrays.stream(getAllMedicalsGeneric()).parallel().collect(Collectors.toList()));
+		patientNewList.addAll(Arrays.stream(getAllMedicalsGeneric()).parallel()
+				.collect(Collectors.toList()));
 		patientNewList.addAll(patients);
 		return medicalRepository.addAllPatients(patientNewList);
+	}
+
+	// generic method of add Patient
+	public <T> T addAllPatientsGeneric(List<T> t) {
+		return medicalRepository.addAllPatientsGeneric(t);
 	}
 
 	// normal method of get Patient
@@ -48,6 +55,7 @@ public class MedicalService {
 	// generic method of get Patient
 	public Patient[] getAllMedicalsGeneric() {
 
-		return medicalRepository.getAllMedicalsGeneric(Patient[].class, FILE_NAME);
+		return medicalRepository.getAllMedicalsGeneric(Patient[].class,
+				FILE_NAME);
 	}
 }

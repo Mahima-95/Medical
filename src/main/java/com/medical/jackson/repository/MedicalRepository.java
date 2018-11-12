@@ -31,8 +31,8 @@ public class MedicalRepository {
 	// private ConvertJavaToJsonObject convertJavaToJsonObject;
 
 	/*
-	 * public <T extends Persistable> boolean getAllTables(T t, Class<T> clazz) {
-	 * String tableName = MEDICAL_SOLUTION_TABLES.get(clazz); return
+	 * public <T extends Persistable> boolean getAllTables(T t, Class<T> clazz)
+	 * { String tableName = MEDICAL_SOLUTION_TABLES.get(clazz); return
 	 * MySQLTemplate.createTableIfNotExist(t, tableName, clazz);
 	 * 
 	 * }
@@ -42,11 +42,14 @@ public class MedicalRepository {
 
 		try {
 			/*
-			 * String res = mapper.writeValueAsString(patient); Files.write(Paths.
+			 * String res = mapper.writeValueAsString(patient);
+			 * Files.write(Paths.
 			 * get("E:\\sts 3.9.1\\Medical-Jackson-practice\\patient3.json"),
 			 * res.getBytes(), StandardOpenOption.APPEND);
 			 */
-			mapper.writeValue(new File("E:\\Java_Git_repositories\\Medical-master\\Medical-master\\patient2.json"),
+			mapper.writeValue(
+					new File(
+							"E:\\Java_Git_repositories\\Medical-master\\Medical-master\\patient2.json"),
 					patient);
 			// mapper.writeValue(file, patient);
 		} catch (JsonGenerationException e) {
@@ -59,10 +62,13 @@ public class MedicalRepository {
 		return "Successfully created";
 	}
 
+	// normal method of add Patient
 	public List<Patient> addAllPatients(List<Patient> patient) {
 
 		try {
-			mapper.writeValue(new File("E:\\Java_Git_repositories\\Medical-master\\Medical-master\\patient3.json"),
+			mapper.writeValue(
+					new File(
+							"E:\\Java_Git_repositories\\Medical-master\\Medical-master\\patient3.json"),
 					patient);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
@@ -74,14 +80,31 @@ public class MedicalRepository {
 		return patient;
 	}
 
+	// generic method of patient
+	public <T> T addAllPatientsGeneric(List<T> t) {
+
+		try {
+			mapper.writeValue(new File("D:\\Mahima\\My Dev Space\\workspace\\Medi-Dev\\patient2.json"),t);
+		} catch (JsonGenerationException e) {
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		return (T) t;
+	}
+
 	// normal method of get Patient
 	public List<Patient> getAllMedicals() {
 		ObjectMapper mapper = new ObjectMapper();
 		Patient[] patient = null;
 		try {
-			patient = mapper.readValue(
-					new File("E:\\Java_Git_repositories\\Medical-master\\Medical-master\\patient3.json"),
-					Patient[].class);
+			patient = mapper
+					.readValue(
+							new File(
+									"E:\\Java_Git_repositories\\Medical-master\\Medical-master\\patient3.json"),
+							Patient[].class);
 
 		} catch (IOException e) {
 			e.printStackTrace();
