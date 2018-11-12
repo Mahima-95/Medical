@@ -58,24 +58,41 @@ public class MedicalController {
 
 	// generic method of get Patient
 	@RequestMapping("/addAllPatientsGeneric")
-	public <T> T addAllPatientsGeneric(@RequestParam int n) {
-		List<T> t = new ArrayList<T>();
-		T patient = null;
+	public List<Patient> addAllPatientsGeneric(@RequestParam int n) {
+		List<Patient> patientList = new ArrayList<Patient>();
+		Patient patient = null;
 		for (int i = 0; i < n; i++) {
-			patient = (T) new Patient();
-			((Patient) patient).setAadhaar("Adhaar");
-			((Patient) patient).setCreatedDate(new Date());
-			((Patient) patient).setEmail("abc@mail.com");
-			((Patient) patient).setGender("Male");
-			((Patient) patient).setId(String.valueOf(i));
-			((Patient) patient).setMobile("8524585450");
-			((Patient) patient).setName("Aviral");
-			((Patient) patient).setPassword("Hello");
-			((Patient) patient).setProfilePicPath("path");
-			t.add(patient);
+			patient = new Patient();
+			patient.setAadhaar("Adhaar");
+			patient.setCreatedDate(new Date());
+			patient.setEmail("abc@mail.com");
+			patient.setGender("Male");
+			patient.setId(String.valueOf(i));
+			patient.setMobile("8524585450");
+			patient.setName("Aviral");
+			patient.setPassword("Hello");
+			patient.setProfilePicPath("path");
+			patientList.add(patient);
 		}
-		return medicalService.addAllPatientsGeneric(t);
+		return (List<Patient>) medicalService
+				.addAllPatientsGeneric(patientList);
 	}
+
+	/*
+	 * // generic method of get Patient
+	 * 
+	 * @RequestMapping("/addAllPatientsGeneric") public <T> T
+	 * addAllPatientsGeneric(@RequestParam int n) { List<T> t = new
+	 * ArrayList<T>(); T patient = null; for (int i = 0; i < n; i++) { patient =
+	 * (T) new Patient(); ((Patient) patient).setAadhaar("Adhaar"); ((Patient)
+	 * patient).setCreatedDate(new Date()); ((Patient)
+	 * patient).setEmail("abc@mail.com"); ((Patient) patient).setGender("Male");
+	 * ((Patient) patient).setId(String.valueOf(i)); ((Patient)
+	 * patient).setMobile("8524585450"); ((Patient) patient).setName("Aviral");
+	 * ((Patient) patient).setPassword("Hello"); ((Patient)
+	 * patient).setProfilePicPath("path"); t.add(patient); } return
+	 * medicalService.addAllPatientsGeneric(t); }
+	 */
 
 	// normal method of get Patient
 	@RequestMapping("/getAllPatients")
@@ -88,6 +105,18 @@ public class MedicalController {
 	public Patient[] getAllMedicalsGeneric() {
 		return medicalService.getAllMedicalsGeneric();
 	}
+
+	// generic method of delete Patient
+	@RequestMapping("/deleteAllMedicalsGeneric")
+	public List<Patient> deleteAllPatientsGeneric() {
+		return medicalService.deleteAllPatientsGeneric();
+	}
+	
+	// generic method of delete Patient by Id
+		@RequestMapping("/deleteAllMedicalsGeneric")
+		public List<Patient> deletePatientByIdGeneric(@RequestParam int n) {
+			return medicalService.deletePatientByIdGeneric();
+		}
 }
 
 // link to commit data using git

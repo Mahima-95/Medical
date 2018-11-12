@@ -19,39 +19,14 @@ public class MedicalRepository {
 
 	ObjectMapper mapper = new ObjectMapper();
 	private static final String PATH = "E:\\\\Java_Git_repositories\\\\Medical-master\\\\Medical-master\\\\";
-	// File file = new File(
-	// "D:\\Mahima\\My Dev
-	// Space\\workspace\\Medical-Sol-master\\Medical-Sol-master\\patient1.json");
-	Files files;
-
-	// private static final Logger LOG =
-	// Logger.getLogger(MedicalRepository.class);
-
-	// @Autowired
-	// private ConvertJavaToJsonObject convertJavaToJsonObject;
-
-	/*
-	 * public <T extends Persistable> boolean getAllTables(T t, Class<T> clazz)
-	 * { String tableName = MEDICAL_SOLUTION_TABLES.get(clazz); return
-	 * MySQLTemplate.createTableIfNotExist(t, tableName, clazz);
-	 * 
-	 * }
-	 */
+	private static final String PATH1 = "D:\\Mahima\\My Dev Space\\workspace\\Medi-Dev\\";
 
 	public String addMedical(Patient patient) {
-
 		try {
-			/*
-			 * String res = mapper.writeValueAsString(patient);
-			 * Files.write(Paths.
-			 * get("E:\\sts 3.9.1\\Medical-Jackson-practice\\patient3.json"),
-			 * res.getBytes(), StandardOpenOption.APPEND);
-			 */
 			mapper.writeValue(
 					new File(
 							"E:\\Java_Git_repositories\\Medical-master\\Medical-master\\patient2.json"),
 					patient);
-			// mapper.writeValue(file, patient);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -64,7 +39,6 @@ public class MedicalRepository {
 
 	// normal method of add Patient
 	public List<Patient> addAllPatients(List<Patient> patient) {
-
 		try {
 			mapper.writeValue(
 					new File(
@@ -84,7 +58,10 @@ public class MedicalRepository {
 	public <T> T addAllPatientsGeneric(List<T> t) {
 
 		try {
-			mapper.writeValue(new File("D:\\Mahima\\My Dev Space\\workspace\\Medi-Dev\\patient2.json"),t);
+			mapper.writeValue(
+					new File(
+							"D:\\Mahima\\My Dev Space\\workspace\\Medi-Dev\\patient2.json"),
+					t);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -97,7 +74,6 @@ public class MedicalRepository {
 
 	// normal method of get Patient
 	public List<Patient> getAllMedicals() {
-		ObjectMapper mapper = new ObjectMapper();
 		Patient[] patient = null;
 		try {
 			patient = mapper
@@ -116,10 +92,16 @@ public class MedicalRepository {
 	public <T> T getAllMedicalsGeneric(Class<T> clazz, String fileName) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			return mapper.readValue(new File(PATH + fileName), clazz);
+			return mapper.readValue(new File(PATH1 + fileName), clazz);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
+
+	// generic method of delete patient
+	public <T> T deleteAllPatientsGeneric(List<Patient> list) {
+		return  (T) list;
+	}
+
 }

@@ -1,7 +1,9 @@
 package com.medical.jackson.service;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -11,13 +13,14 @@ import org.springframework.stereotype.Service;
 
 import com.medical.jackson.model.Patient;
 import com.medical.jackson.repository.MedicalRepository;
+import com.mysql.fabric.xmlrpc.base.Array;
 
 @Service
 public class MedicalService {
 
 	private static final Logger LOG = Logger.getLogger(MedicalService.class);
 
-	private static final String FILE_NAME = "patient3.json";
+	private static final String FILE_NAME = "patient2.json";
 
 	@Autowired
 	private MedicalRepository medicalRepository;
@@ -42,8 +45,9 @@ public class MedicalService {
 	}
 
 	// generic method of add Patient
-	public <T> T addAllPatientsGeneric(List<T> t) {
-		return medicalRepository.addAllPatientsGeneric(t);
+	public List<Patient> addAllPatientsGeneric(List<Patient> patients) {
+		return (List<Patient>) medicalRepository
+				.addAllPatientsGeneric(patients);
 	}
 
 	// normal method of get Patient
@@ -54,8 +58,13 @@ public class MedicalService {
 
 	// generic method of get Patient
 	public Patient[] getAllMedicalsGeneric() {
-
 		return medicalRepository.getAllMedicalsGeneric(Patient[].class,
 				FILE_NAME);
 	}
+
+	// generic method of delete Patient
+	public List<Patient> deleteAllPatientsGeneric() {
+		return (List<Patient>) medicalRepository.deleteAllPatientsGeneric(addAllPatientsGeneric(new ArrayList<>()));
+	}
+
 }
