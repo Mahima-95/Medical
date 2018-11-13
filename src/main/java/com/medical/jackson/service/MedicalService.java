@@ -22,16 +22,6 @@ public class MedicalService {
 		this.medicalRepository = medicalRepository;
 	}
 
-	public String addDoctor(Patient patient) {
-		return medicalRepository.addMedical(patient);
-	}
-
-	// normal method of add Patient
-	public List<Patient> addAllPatients(List<Patient> patients) {
-
-		return medicalRepository.addAllPatients(patients);
-	}
-
 	public List<Patient> addAllPatientsInAppendMode(List<Patient> patients) {
 
 		List<Patient> patientNewList = new ArrayList<>();
@@ -60,12 +50,6 @@ public class MedicalService {
 			patientList.add(patient);
 		}
 		return medicalRepository.addAllPatientsGeneric(patientList);
-	}
-
-	// normal method of get Patient
-	public List<Patient> getAllPatients() {
-
-		return medicalRepository.getAllMedicals();
 	}
 
 	// generic method of get Patient

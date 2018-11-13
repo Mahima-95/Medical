@@ -21,7 +21,7 @@ public class MedicalRepository {
 
 	private ObjectMapper mapper = new ObjectMapper();
 	private static final String PATH = "src/main/resources/";
-	private static final String FILE_NAME = "patient3.json";
+	private static final String FILE_NAME = "patient.json";
 
 	Map<String, Object> map = null;
 
@@ -29,17 +29,17 @@ public class MedicalRepository {
 		constructAllMedicalMap();
 	}
 
-	public String addMedical(Patient patient) {
-		try {
-			mapper.writeValue(new File(PATH + FILE_NAME), patient);
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			e.printStackTrace();
+	private void constructAllMedicalMap() {
+
+		Patient[] patients = getAllMedicalsGeneric(Patient[].class);
+		if (patients.length == 0) {
+			addAllPatientsGeneric(new ArrayList<>());
+		} else {
+			this.map = new HashMap<>();
+			for (Patient patient : patients) {
+				map.put(patient.getId(), patient);
+			}
 		}
-		return "Successfully created";
 	}
 
 	// normal method of add Patient
@@ -71,21 +71,9 @@ public class MedicalRepository {
 		return (List<T>) t;
 	}
 
-	// normal method of get Patient
-	public List<Patient> getAllMedicals() {
-		Patient[] patient = null;
-		try {
-			patient = mapper.readValue(new File(PATH + FILE_NAME), Patient[].class);
-
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		return Arrays.stream(patient).parallel().collect(Collectors.toList());
-	}
-
 	// generic method of get Patient
 	public <T> T getAllMedicalsGeneric(Class<T> clazz) {
-		
+
 		File file = new File(PATH + FILE_NAME);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
@@ -96,23 +84,11 @@ public class MedicalRepository {
 		return null;
 	}
 
-	private void constructAllMedicalMap() {
-
-		Patient[] patients = getAllMedicalsGeneric(Patient[].class);
-		if (patients.length == 0) {
-			addAllPatientsGeneric(new ArrayList<>());
-		} else {
-			this.map = new HashMap<>();
-			for (Patient patient : patients) {
-				map.put(patient.getId(), patient);
-			}
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	public <T> List<T> deletePatientByIdGeneric(int n) {
 
-		Object removed = map.remove(map.containsKey(String.valueOf(n)) ? String.valueOf(n) : null);
+		Object removed = map.remove(map.containsKey(String.valueOf(n)) ? String
+				.valueOf(n) : null);
 		if (removed != null) {
 			List<Patient> patients = new ArrayList<>();
 			for (String key : map.keySet()) {

@@ -18,21 +18,6 @@ public class MedicalController {
 	@Autowired
 	private MedicalService medicalService;
 
-	@RequestMapping("/add")
-	public String addDoctor() {
-		Patient patient = new Patient();
-		patient.setAadhaar("Adhaar");
-		patient.setCreatedDate(new Date());
-		patient.setEmail("abc@mail.com");
-		patient.setGender("Male");
-		patient.setId("3");
-		patient.setMobile("8524585450");
-		patient.setName("Aviral");
-		patient.setPassword("Hello");
-		patient.setProfilePicPath("path");
-		return medicalService.addDoctor(patient);
-	}
-
 	// normal method of add Patient
 	@RequestMapping("/addAllPatients")
 	public List<Patient> addAllPatients(@RequestParam int n) {
@@ -60,12 +45,6 @@ public class MedicalController {
 			return medicalService.addAllPatientsGeneric(n);
 		}
 
-	// normal method of get Patient
-	@RequestMapping("/getAllPatients")
-	public List<Patient> getAllMedicals() {
-		return medicalService.getAllPatients();
-	}
-
 	// generic method of get Patient
 	@RequestMapping("/getAllMedicalsGeneric")
 	public Patient[] getAllMedicalsGeneric() {
@@ -84,8 +63,3 @@ public class MedicalController {
 		return medicalService.deletePatientByIdGeneric(n);
 	}
 }
-
-// link to commit data using git
-// bash----------https://help.github.com/articles/adding-an-existing-project-to-github-using-the-command-line/
-// link to create a git branch and commit using git
-// bash--------https://confluence.atlassian.com/bitbucket/branching-a-repository-223217999.html
