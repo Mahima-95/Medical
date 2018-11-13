@@ -51,6 +51,11 @@ public class MedicalService {
 		}
 		return medicalRepository.addAllPatientsGeneric(patientList);
 	}
+	
+	public Patient updatePatient(Patient patient){
+		
+		return medicalRepository.update(patient);
+	}
 
 	// generic method of get Patient
 	public Patient[] getAllMedicalsGeneric() {

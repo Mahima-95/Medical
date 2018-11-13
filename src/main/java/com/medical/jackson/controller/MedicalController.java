@@ -5,7 +5,9 @@ import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -40,15 +42,20 @@ public class MedicalController {
 	}
 
 	// generic method of get Patient
-		@RequestMapping("/addAllPatientsGeneric")
-		public List<Patient> addAllPatientsGeneric(@RequestParam int n) {
-			return medicalService.addAllPatientsGeneric(n);
-		}
+	@RequestMapping("/addAllPatientsGeneric")
+	public List<Patient> addAllPatientsGeneric(@RequestParam int n) {
+		return medicalService.addAllPatientsGeneric(n);
+	}
 
 	// generic method of get Patient
 	@RequestMapping("/getAllMedicalsGeneric")
 	public Patient[] getAllMedicalsGeneric() {
 		return medicalService.getAllMedicalsGeneric();
+	}
+
+	@RequestMapping(value ="/updatePatient", method = RequestMethod.POST)
+	public Patient updatePatient(@RequestBody Patient patient) {
+		return medicalService.updatePatient(patient);
 	}
 
 	// generic method of delete Patient
