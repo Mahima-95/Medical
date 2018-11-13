@@ -1,24 +1,19 @@
 package com.medical.jackson.service;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.medical.jackson.model.Patient;
 import com.medical.jackson.repository.MedicalRepository;
-import com.mysql.fabric.xmlrpc.base.Array;
 
 @Service
 public class MedicalService {
-
-	private static final Logger LOG = Logger.getLogger(MedicalService.class);
 
 	private static final String FILE_NAME = "patient3.json";
 
@@ -38,14 +33,33 @@ public class MedicalService {
 	public List<Patient> addAllPatientsInAppendMode(List<Patient> patients) {
 
 		List<Patient> patientNewList = new ArrayList<>();
-		patientNewList.addAll(Arrays.stream(getAllMedicalsGeneric()).parallel().collect(Collectors.toList()));
+		patientNewList.addAll(Arrays.stream(getAllMedicalsGeneric()).parallel()
+				.collect(Collectors.toList()));
 		patientNewList.addAll(patients);
 		return medicalRepository.addAllPatients(patientNewList);
 	}
 
 	// generic method of add Patient
-	public List<Patient> addAllPatientsGeneric(List<Patient> patients) {
-		return medicalRepository.addAllPatientsGeneric(patients);
+	public List<Patient> addAllPatientsGeneric(int n) {
+
+		Patient[] patients = getAllMedicalsGeneric();
+
+		List<Patient> patientList = new ArrayList<Patient>();
+		Patient patient = null;
+		for (int i = 0; i < patients.length + n; i++) {
+			patient = new Patient();
+			patient.setAadhaar("Adhaar");
+			patient.setCreatedDate(new Date());
+			patient.setEmail("abc@mail.com");
+			patient.setGender("Male");
+			patient.setId(String.valueOf(i));
+			patient.setMobile("8524585450");
+			patient.setName("Aviral");
+			patient.setPassword("Hello");
+			patient.setProfilePicPath("path");
+			patientList.add(patient);
+		}
+		return medicalRepository.addAllPatientsGeneric(patientList);
 	}
 
 	// normal method of get Patient
@@ -56,12 +70,15 @@ public class MedicalService {
 
 	// generic method of get Patient
 	public Patient[] getAllMedicalsGeneric() {
-		return medicalRepository.getAllMedicalsGeneric(Patient[].class, FILE_NAME);
+		return medicalRepository.getAllMedicalsGeneric(Patient[].class,
+				FILE_NAME);
 	}
 
 	// generic method of delete Patient
 	public List<Patient> deleteAllPatientsGeneric() {
-		return (List<Patient>) medicalRepository.deleteAllPatientsGeneric(addAllPatientsGeneric(new ArrayList<>()));
+		
+		return  medicalRepository
+				.deleteAllPatientsGeneric();
 	}
 
 	public List<Patient> deletePatientByIdGeneric(int n) {

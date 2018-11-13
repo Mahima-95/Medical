@@ -1,12 +1,10 @@
 package com.medical.jackson.controller;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -57,25 +55,10 @@ public class MedicalController {
 	}
 
 	// generic method of get Patient
-	@RequestMapping("/addAllPatientsGeneric")
-	public List<Patient> addAllPatientsGeneric(@RequestParam int n) {
-		List<Patient> patientList = new ArrayList<Patient>();
-		Patient patient = null;
-		for (int i = 0; i < n; i++) {
-			patient = new Patient();
-			patient.setAadhaar("Adhaar");
-			patient.setCreatedDate(new Date());
-			patient.setEmail("abc@mail.com");
-			patient.setGender("Male");
-			patient.setId(String.valueOf(i));
-			patient.setMobile("8524585450");
-			patient.setName("Aviral");
-			patient.setPassword("Hello");
-			patient.setProfilePicPath("path");
-			patientList.add(patient);
+		@RequestMapping("/addAllPatientsGeneric")
+		public List<Patient> addAllPatientsGeneric(@RequestParam int n) {
+			return medicalService.addAllPatientsGeneric(n);
 		}
-		return (List<Patient>) medicalService.addAllPatientsGeneric(patientList);
-	}
 
 	// normal method of get Patient
 	@RequestMapping("/getAllPatients")

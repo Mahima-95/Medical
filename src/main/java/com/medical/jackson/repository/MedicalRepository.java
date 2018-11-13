@@ -9,8 +9,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.ArrayUtils;
-import org.springframework.core.env.SystemEnvironmentPropertySource;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -23,7 +21,7 @@ public class MedicalRepository {
 
 	ObjectMapper mapper = new ObjectMapper();
 	private static final String HOME_PATH = "E:\\Java_Git_repositories\\Medical\\Medical\\";
-	private static final String OFFICE_PATH = "D:\\Mahima\\My Dev Space\\workspace\\Medi-Dev\\";
+	private static final String OFFICE_PATH = "D:\\Mahima\\My Dev Space\\workspace\\Medical-Dev\\medical\\";
 	private static final String FILE_NAME = "patient3.json";
 
 	Map<String, Object> map = null;
@@ -36,15 +34,20 @@ public class MedicalRepository {
 
 		this.map = new HashMap<>();
 		Patient[] patients = getAllMedicalsGeneric(Patient[].class, FILE_NAME);
-		for (Patient patient : patients) {
-			map.put(patient.getId(), patient);
+
+		if (patients.length == 0) {
+			List t = new ArrayList<>();
+			addAllPatientsGeneric(t);
+		} else {
+			for (Patient patient : patients) {
+				map.put(patient.getId(), patient);
+			}
 		}
 	}
 
 	public String addMedical(Patient patient) {
 		try {
-			mapper.writeValue(new File(HOME_PATH + FILE_NAME),
-					patient);
+			mapper.writeValue(new File(OFFICE_PATH + FILE_NAME), patient);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -58,8 +61,7 @@ public class MedicalRepository {
 	// normal method of add Patient
 	public List<Patient> addAllPatients(List<Patient> patient) {
 		try {
-			mapper.writeValue(new File(HOME_PATH + FILE_NAME),
-					patient);
+			mapper.writeValue(new File(OFFICE_PATH + FILE_NAME), patient);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -74,7 +76,7 @@ public class MedicalRepository {
 	public <T> List<T> addAllPatientsGeneric(List<T> t) {
 
 		try {
-			mapper.writeValue(new File(HOME_PATH + FILE_NAME), t);
+			mapper.writeValue(new File(OFFICE_PATH + FILE_NAME), t);
 		} catch (JsonGenerationException e) {
 			e.printStackTrace();
 		} catch (JsonMappingException e) {
@@ -89,7 +91,8 @@ public class MedicalRepository {
 	public List<Patient> getAllMedicals() {
 		Patient[] patient = null;
 		try {
-			patient = mapper.readValue(new File(HOME_PATH + FILE_NAME), Patient[].class);
+			patient = mapper.readValue(new File(OFFICE_PATH + FILE_NAME),
+					Patient[].class);
 
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -101,22 +104,23 @@ public class MedicalRepository {
 	public <T> T getAllMedicalsGeneric(Class<T> clazz, String fileName) {
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			return mapper.readValue(new File(HOME_PATH + fileName), clazz);
+			return mapper.readValue(new File(OFFICE_PATH + fileName), clazz);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 		return null;
 	}
 
-	// generic method of delete patient
-	public <T> T deleteAllPatientsGeneric(List<Patient> list) {
-		return (T) list;
-	}
-
+	/*
+	 * // generic method of delete patient public <T> T
+	 * deleteAllPatientsGeneric() { addAllPatientsGeneric(new ArrayList<>());
+	 * return (T) list; }
+	 */
 	@SuppressWarnings("unchecked")
 	public <T> List<T> deletePatientByIdGeneric(int n) {
 
-		Object removed = map.remove(map.containsKey(String.valueOf(n)) ? String.valueOf(n) : null);
+		Object removed = map.remove(map.containsKey(String.valueOf(n)) ? String
+				.valueOf(n) : null);
 		if (removed != null) {
 			List<Patient> patients = new ArrayList<>();
 			for (String key : map.keySet()) {
@@ -125,5 +129,9 @@ public class MedicalRepository {
 			return (List<T>) addAllPatientsGeneric(patients);
 		}
 		return null;
+	}
+
+	public <T> T deleteAllPatientsGeneric() {
+		return (T) addAllPatientsGeneric(new ArrayList<>());
 	}
 }
