@@ -19,7 +19,7 @@ import com.medical.jackson.model.Patient;
 @Repository
 public class MedicalRepository {
 
-	ObjectMapper mapper = new ObjectMapper();
+	private ObjectMapper mapper = new ObjectMapper();
 	private static final String PATH = "src/main/resources/";
 	private static final String FILE_NAME = "patient3.json";
 
@@ -84,10 +84,12 @@ public class MedicalRepository {
 	}
 
 	// generic method of get Patient
-	public <T> T getAllMedicalsGeneric(Class<T> clazz, String fileName) {
+	public <T> T getAllMedicalsGeneric(Class<T> clazz) {
+		
+		File file = new File(PATH + FILE_NAME);
 		ObjectMapper mapper = new ObjectMapper();
 		try {
-			return mapper.readValue(new File(fileName), clazz);
+			return mapper.readValue(file, clazz);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -96,8 +98,7 @@ public class MedicalRepository {
 
 	private void constructAllMedicalMap() {
 
-		File file = new File(PATH + FILE_NAME);
-		Patient[] patients = getAllMedicalsGeneric(Patient[].class, file.getAbsolutePath());
+		Patient[] patients = getAllMedicalsGeneric(Patient[].class);
 		if (patients.length == 0) {
 			addAllPatientsGeneric(new ArrayList<>());
 		} else {

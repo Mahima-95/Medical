@@ -15,10 +15,12 @@ import com.medical.jackson.repository.MedicalRepository;
 @Service
 public class MedicalService {
 
-	private static final String FILE_NAME = "patient3.json";
+	private MedicalRepository medicalRepository;
 
 	@Autowired
-	private MedicalRepository medicalRepository;
+	public MedicalService(MedicalRepository medicalRepository) {
+		this.medicalRepository = medicalRepository;
+	}
 
 	public String addDoctor(Patient patient) {
 		return medicalRepository.addMedical(patient);
@@ -33,8 +35,7 @@ public class MedicalService {
 	public List<Patient> addAllPatientsInAppendMode(List<Patient> patients) {
 
 		List<Patient> patientNewList = new ArrayList<>();
-		patientNewList.addAll(Arrays.stream(getAllMedicalsGeneric()).parallel()
-				.collect(Collectors.toList()));
+		patientNewList.addAll(Arrays.stream(getAllMedicalsGeneric()).parallel().collect(Collectors.toList()));
 		patientNewList.addAll(patients);
 		return medicalRepository.addAllPatients(patientNewList);
 	}
@@ -43,16 +44,15 @@ public class MedicalService {
 	public List<Patient> addAllPatientsGeneric(int n) {
 
 		Patient[] patients = getAllMedicalsGeneric();
-
-		List<Patient> patientList = new ArrayList<Patient>();
+		List<Patient> patientList = Arrays.stream(patients).parallel().collect(Collectors.toList());
 		Patient patient = null;
-		for (int i = 0; i < patients.length + n; i++) {
+		for (int i = 1; i <= n; i++) {
 			patient = new Patient();
 			patient.setAadhaar("Adhaar");
 			patient.setCreatedDate(new Date());
 			patient.setEmail("abc@mail.com");
 			patient.setGender("Male");
-			patient.setId(String.valueOf(i));
+			patient.setId(String.valueOf(patients.length + i));
 			patient.setMobile("8524585450");
 			patient.setName("Aviral");
 			patient.setPassword("Hello");
@@ -70,15 +70,13 @@ public class MedicalService {
 
 	// generic method of get Patient
 	public Patient[] getAllMedicalsGeneric() {
-		return medicalRepository.getAllMedicalsGeneric(Patient[].class,
-				FILE_NAME);
+		return medicalRepository.getAllMedicalsGeneric(Patient[].class);
 	}
 
 	// generic method of delete Patient
 	public List<Patient> deleteAllPatientsGeneric() {
-		
-		return  medicalRepository
-				.deleteAllPatientsGeneric();
+
+		return medicalRepository.deleteAllPatientsGeneric();
 	}
 
 	public List<Patient> deletePatientByIdGeneric(int n) {
