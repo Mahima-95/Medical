@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.reflect.FieldUtils;
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
@@ -78,7 +77,6 @@ public class MedicalRepository {
 	public <T> T getAllMedicalsGeneric(Class<T> clazz) {
 
 		File file = new File(PATH + FILE_NAME);
-		ObjectMapper mapper = new ObjectMapper();
 		try {
 			return mapper.readValue(file, clazz);
 		} catch (IOException e) {
@@ -132,7 +130,6 @@ public class MedicalRepository {
 
 	@SuppressWarnings("unchecked")
 	private <T> List<T> convertMapToList(Map<String, Object> map) {
-
 		return (List<T>) map.values().stream().parallel().collect(Collectors.toList());
 	}
 }
