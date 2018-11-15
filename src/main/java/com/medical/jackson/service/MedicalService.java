@@ -2,6 +2,8 @@ package com.medical.jackson.service;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -9,6 +11,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.google.common.collect.Iterables;
 import com.medical.jackson.model.Patient;
 import com.medical.jackson.repository.MedicalRepository;
 
@@ -51,15 +54,19 @@ public class MedicalService {
 		}
 		return medicalRepository.addAllPatientsGeneric(patientList);
 	}
-	
-	public Patient updatePatient(Patient patient){
-		
+
+	public Patient updatePatient(Patient patient) {
+
 		return medicalRepository.update(patient);
 	}
 
 	// generic method of get Patient
 	public Patient[] getAllMedicalsGeneric() {
-		return medicalRepository.getAllMedicalsGeneric(Patient[].class);
+
+		Patient[] patients = medicalRepository.getAllMedicalsGeneric(Patient[].class);
+		List<Patient> patientList = Arrays.stream(patients).parallel().collect(Collectors.toList());
+		Collections.sort(patientList, patientComparatorForId);
+		return Iterables.toArray(patientList, Patient.class);
 	}
 
 	// generic method of delete Patient
@@ -71,5 +78,13 @@ public class MedicalService {
 	public List<Patient> deletePatientByIdGeneric(int n) {
 		return medicalRepository.deletePatientByIdGeneric(n);
 	}
+
+	private Comparator<Patient> patientComparatorForId = new Comparator<Patient>() {
+
+		@Override
+		public int compare(Patient p1, Patient p2) {
+			return Integer.valueOf(p1.getId()) - Integer.valueOf(p2.getId());
+		}
+	};
 
 }
