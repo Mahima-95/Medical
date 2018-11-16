@@ -36,18 +36,20 @@ public class MedicalRepository extends AbstractRepository {
 	}
 
 	// generic method of patient
-	public <T> List<T> addAllPatientsGeneric(List<T> t) {
-
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> List<T> addAllPatientsGeneric(int n) {
+		return (List<T>) addPatientsInList(n);
+	}
+	
+	public <T> List<T> addPatient(List<T> t) {
 		try {
 			mapper.writeValue(new File(PATH + FILE_NAME), t);
-		} catch (JsonGenerationException e) {
-			e.printStackTrace();
-		} catch (JsonMappingException e) {
-			e.printStackTrace();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		return (List<T>) t;
+		return t;
+		
 	}
 
 	// generic method of get Patient
@@ -97,13 +99,23 @@ public class MedicalRepository extends AbstractRepository {
 				patients.add((Patient) map.get(key));
 			}
 			setPatientID(removed);
-			return (List<T>) addAllPatientsGeneric(patients);
+			
+			return  (List<T>) addPatient(patients);
 		}
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
 	public <T> T deleteAllPatientsGeneric() {
-		return (T) addAllPatientsGeneric(new ArrayList<>());
+		return (T) addPatient(new ArrayList<>());
 	}
+
+	@Override
+	public <T> List<T> addAllPatientsGeneric(List<T> t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	
+
 }

@@ -1,7 +1,10 @@
 package com.medical.jackson.repository;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
@@ -22,10 +25,14 @@ public abstract class AbstractRepository {
 
 	protected abstract List<Patient> addAllPatients(List<Patient> patient);
 
+	protected abstract <T> List<T> addAllPatientsGeneric(int n);
+
 	protected abstract <T> List<T> addAllPatientsGeneric(List<T> t);
 
 	protected abstract <T> T getAllMedicalsGeneric(Class<T> clazz);
-	
+
+	protected abstract <T> List<T> addPatient(List<T> t);
+
 	@SuppressWarnings("unchecked")
 	protected <T> List<T> convertMapToList(Map<String, Object> map) {
 		return (List<T>) map.values().stream().parallel().collect(Collectors.toList());
@@ -43,12 +50,63 @@ public abstract class AbstractRepository {
 
 		Patient[] patients = getAllMedicalsGeneric(Patient[].class);
 		if (patients.length == 0) {
-			addAllPatientsGeneric(new ArrayList<>());
+			addPatient(new ArrayList<>());
 		} else {
 			this.map = new HashMap<>();
 			for (Patient patient : patients) {
 				map.put(patient.getId(), patient);
 			}
 		}
+	}
+
+	@SuppressWarnings("unchecked")
+	protected <T> List<T> addPatientsInList(int n) {
+
+		if (GetIDSet.size() > 0) {
+			if (GetIDSet.size() >= n) {
+				setIteratorAndRemoveFromSet();
+			} else {
+				setIteratorAndRemoveFromSet();
+				setIntoMap(n);
+			}
+		} else {
+			setIntoMap(n);
+		}
+		return (List<T>) addPatient(Arrays.stream(map.values().toArray()).parallel().collect(Collectors.toList()));
+	}
+
+	private void setIteratorAndRemoveFromSet() {
+
+		List<Patient> patientList = new ArrayList<Patient>();
+		Iterator<Integer> iterator = GetIDSet.iterator();
+		while (iterator.hasNext()) {
+			patientList.add(setPatient(iterator.next()));
+			iterator.remove();
+		}
+		patientList.forEach(x -> map.put(x.getId(), x));
+	}
+
+	private void setIntoMap(int n) {
+
+		List<Patient> patientList = new ArrayList<Patient>();
+		for (int i = map.size() + 1; i <= map.size() + n; i++) {
+			patientList.add(setPatient(i));
+		}
+		patientList.forEach(x -> map.put(x.getId(), x));
+	}
+
+	private Patient setPatient(int id) {
+
+		Patient patient = new Patient();
+		patient.setAadhaar("Adhaar");
+		patient.setCreatedDate(new Date());
+		patient.setEmail("abc@mail.com");
+		patient.setGender("Male");
+		patient.setId(String.valueOf(id));
+		patient.setMobile("8524585450");
+		patient.setName("Aviral");
+		patient.setPassword("Hello");
+		patient.setProfilePicPath("path");
+		return patient;
 	}
 }
