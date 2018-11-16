@@ -9,23 +9,20 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.medical.jackson.model.Patient;
 
 @Repository
-public class MedicalRepository {
-
-	private ObjectMapper mapper = new ObjectMapper();
-	private static final String PATH = "src/main/resources/";
-	private static final String FILE_NAME = "patient.json";
+public class MedicalRepository extends AbstractRepository {
 
 	Map<String, Object> map = null;
+	TreeSet<Integer> GetIDSet = new TreeSet<>();
 
 	public MedicalRepository() {
 		constructAllMedicalMap();
@@ -118,9 +115,18 @@ public class MedicalRepository {
 			for (String key : map.keySet()) {
 				patients.add((Patient) map.get(key));
 			}
+			setPatientID(removed);
 			return (List<T>) addAllPatientsGeneric(patients);
 		}
 		return null;
+	}
+
+	private void setPatientID(Object object) {
+
+		if (object != null) {
+			Patient patient = (Patient) object;
+			GetIDSet.add(Integer.valueOf(patient.getId()));
+		}
 	}
 
 	@SuppressWarnings("unchecked")
