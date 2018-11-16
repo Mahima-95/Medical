@@ -6,11 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeSet;
-import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Repository;
 
@@ -21,24 +17,8 @@ import com.medical.jackson.model.Patient;
 @Repository
 public class MedicalRepository extends AbstractRepository {
 
-	Map<String, Object> map = null;
-	TreeSet<Integer> GetIDSet = new TreeSet<>();
-
 	public MedicalRepository() {
 		constructAllMedicalMap();
-	}
-
-	private void constructAllMedicalMap() {
-
-		Patient[] patients = getAllMedicalsGeneric(Patient[].class);
-		if (patients.length == 0) {
-			addAllPatientsGeneric(new ArrayList<>());
-		} else {
-			this.map = new HashMap<>();
-			for (Patient patient : patients) {
-				map.put(patient.getId(), patient);
-			}
-		}
 	}
 
 	// normal method of add Patient
@@ -107,6 +87,7 @@ public class MedicalRepository extends AbstractRepository {
 	}
 
 	@SuppressWarnings("unchecked")
+	@Override
 	public <T> List<T> deletePatientByIdGeneric(int n) {
 
 		Object removed = map.remove(map.containsKey(String.valueOf(n)) ? String.valueOf(n) : null);
@@ -121,21 +102,8 @@ public class MedicalRepository extends AbstractRepository {
 		return null;
 	}
 
-	private void setPatientID(Object object) {
-
-		if (object != null) {
-			Patient patient = (Patient) object;
-			GetIDSet.add(Integer.valueOf(patient.getId()));
-		}
-	}
-
 	@SuppressWarnings("unchecked")
 	public <T> T deleteAllPatientsGeneric() {
 		return (T) addAllPatientsGeneric(new ArrayList<>());
-	}
-
-	@SuppressWarnings("unchecked")
-	private <T> List<T> convertMapToList(Map<String, Object> map) {
-		return (List<T>) map.values().stream().parallel().collect(Collectors.toList());
 	}
 }
