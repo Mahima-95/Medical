@@ -49,24 +49,24 @@ public class MedicalController {
 
 	// generic method of get Patient
 	@RequestMapping("/getPatient")
-	public Patient[] getAllMedicalsGeneric() {
-		return medicalService.getAllMedicalsGeneric();
+	public Patient[] getAllPatients() {
+		return medicalService.getAllPatients();
 	}
-	
-	@RequestMapping(value ="/updatePatient", method = RequestMethod.POST)
+
+	@RequestMapping(value = "/updatePatient", method = RequestMethod.POST)
 	public Patient updatePatient(@RequestBody Patient patient) {
 		return medicalService.updatePatient(patient);
 	}
 
 	// generic method of delete Patient
 	@RequestMapping("/deleteAllPatient")
-	public List<Patient> deleteAllPatientsGeneric() {
-		return medicalService.deleteAllPatientsGeneric();
+	public List<Patient> deleteAllPatients() {
+		return medicalService.deleteAllPatients();
 	}
 
 	// generic method of delete Patient by Id
 	@RequestMapping("/deletePatientById")
-	public List<Patient> deletePatientByIdGeneric(@RequestParam int n) {
-		return medicalService.deletePatientByIdGeneric(n);
+	public List<Patient> deletePatientById(@RequestParam int n) {
+		return medicalService.deletePatientById(n);
 	}
 }

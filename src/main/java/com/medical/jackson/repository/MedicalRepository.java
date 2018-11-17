@@ -41,7 +41,7 @@ public class MedicalRepository extends AbstractRepository {
 	public <T> List<T> addAllPatientsGeneric(int n) {
 		return (List<T>) addPatientsInList(n);
 	}
-	
+
 	public <T> List<T> addPatient(List<T> t) {
 		try {
 			mapper.writeValue(new File(PATH + FILE_NAME), t);
@@ -49,11 +49,11 @@ public class MedicalRepository extends AbstractRepository {
 			e.printStackTrace();
 		}
 		return t;
-		
+
 	}
 
 	// generic method of get Patient
-	public <T> T getAllMedicalsGeneric(Class<T> clazz) {
+	public <T> T getAllPatients(Class<T> clazz) {
 
 		File file = new File(PATH + FILE_NAME);
 		try {
@@ -76,7 +76,7 @@ public class MedicalRepository extends AbstractRepository {
 						String value = String.valueOf(field.get(t));
 						if (value != null && map.containsKey(value)) {
 							map.put(value, t);
-							addAllPatientsGeneric(convertMapToList(map));
+							addPatient(convertMapToList(map));
 							return (T) map.get(value);
 						}
 					} catch (IllegalArgumentException | IllegalAccessException e) {
@@ -90,7 +90,7 @@ public class MedicalRepository extends AbstractRepository {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> deletePatientByIdGeneric(int n) {
+	public <T> List<T> deletePatientById(int n) {
 
 		Object removed = map.remove(map.containsKey(String.valueOf(n)) ? String.valueOf(n) : null);
 		if (removed != null) {
@@ -99,23 +99,15 @@ public class MedicalRepository extends AbstractRepository {
 				patients.add((Patient) map.get(key));
 			}
 			setPatientID(removed);
-			
-			return  (List<T>) addPatient(patients);
+
+			return (List<T>) addPatient(patients);
 		}
 		return null;
 	}
 
 	@SuppressWarnings("unchecked")
-	public <T> T deleteAllPatientsGeneric() {
+	public <T> T deleteAllPatients() {
 		return (T) addPatient(new ArrayList<>());
 	}
-
-	@Override
-	public <T> List<T> addAllPatientsGeneric(List<T> t) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	
 
 }

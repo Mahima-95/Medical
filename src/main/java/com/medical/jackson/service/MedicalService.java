@@ -27,7 +27,7 @@ public class MedicalService {
 	public List<Patient> addAllPatientsInAppendMode(List<Patient> patients) {
 
 		List<Patient> patientNewList = new ArrayList<>();
-		patientNewList.addAll(Arrays.stream(getAllMedicalsGeneric()).parallel().collect(Collectors.toList()));
+		patientNewList.addAll(Arrays.stream(getAllPatients()).parallel().collect(Collectors.toList()));
 		patientNewList.addAll(patients);
 		return medicalRepository.addAllPatients(patientNewList);
 	}
@@ -44,22 +44,22 @@ public class MedicalService {
 	}
 
 	// generic method of get Patient
-	public Patient[] getAllMedicalsGeneric() {
+	public Patient[] getAllPatients() {
 
-		Patient[] patients = medicalRepository.getAllMedicalsGeneric(Patient[].class);
+		Patient[] patients = medicalRepository.getAllPatients(Patient[].class);
 		List<Patient> patientList = Arrays.stream(patients).parallel().collect(Collectors.toList());
 		Collections.sort(patientList, patientComparatorForId);
 		return Iterables.toArray(patientList, Patient.class);
 	}
 
 	// generic method of delete Patient
-	public List<Patient> deleteAllPatientsGeneric() {
+	public List<Patient> deleteAllPatients() {
 
-		return medicalRepository.deleteAllPatientsGeneric();
+		return medicalRepository.deleteAllPatients();
 	}
 
-	public List<Patient> deletePatientByIdGeneric(int n) {
-		return medicalRepository.deletePatientByIdGeneric(n);
+	public List<Patient> deletePatientById(int n) {
+		return medicalRepository.deletePatientById(n);
 	}
 
 	private Comparator<Patient> patientComparatorForId = new Comparator<Patient>() {

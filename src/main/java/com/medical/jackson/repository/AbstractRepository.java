@@ -21,15 +21,13 @@ public abstract class AbstractRepository {
 	protected static final String PATH = "src/main/resources/";
 	protected static final String FILE_NAME = "patient.json";
 
-	protected abstract <T> List<T> deletePatientByIdGeneric(int n);
+	protected abstract <T> List<T> deletePatientById(int n);
 
 	protected abstract List<Patient> addAllPatients(List<Patient> patient);
 
 	protected abstract <T> List<T> addAllPatientsGeneric(int n);
 
-	protected abstract <T> List<T> addAllPatientsGeneric(List<T> t);
-
-	protected abstract <T> T getAllMedicalsGeneric(Class<T> clazz);
+	protected abstract <T> T getAllPatients(Class<T> clazz);
 
 	protected abstract <T> List<T> addPatient(List<T> t);
 
@@ -48,7 +46,7 @@ public abstract class AbstractRepository {
 
 	protected void constructAllMedicalMap() {
 
-		Patient[] patients = getAllMedicalsGeneric(Patient[].class);
+		Patient[] patients = getAllPatients(Patient[].class);
 		if (patients.length == 0) {
 			addPatient(new ArrayList<>());
 		} else {
