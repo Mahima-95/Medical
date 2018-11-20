@@ -1,5 +1,11 @@
 package com.medical.jackson.service;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.Reader;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -9,6 +15,7 @@ import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.google.common.collect.Iterables;
 import com.medical.jackson.model.Patient;
@@ -35,7 +42,7 @@ public class MedicalService {
 	// generic method of add Patient
 	public List<Patient> addAllPatientsGeneric(int n) {
 
-		return medicalRepository.addAllPatientsGeneric(n);
+		return medicalRepository.addAllPatientsGeneric(n, null);
 	}
 
 	public Patient updatePatient(Patient patient) {
@@ -70,4 +77,40 @@ public class MedicalService {
 		}
 	};
 
+	public List<Patient> uploadDocument(MultipartFile multipartFile) {
+
+		File file = new File(multipartFile.getOriginalFilename());
+		List<Patient> patients = new ArrayList<>();
+		try {
+			file.createNewFile();
+			FileOutputStream fos = new FileOutputStream(file);
+			fos.write(multipartFile.getBytes());
+			// multipartFile.transferTo(file);
+			Reader in = new FileReader(file);
+			BufferedReader bufferReader = new BufferedReader(in);
+			bufferReader.lines().forEach(x -> {
+				String[] arr = x.split(",");
+				Patient patient = new Patient();
+				patient.setName(arr[0]);
+				patient.setMobile(arr[1]);
+				patient.setAadhaar(arr[2]);
+				patient.setEmail(arr[3]);
+				patient.setGender(arr[4]);
+				patient.setAllergies(arr[5]);
+				patient.setPassword(arr[6]);
+				patient.setProfilePicPath(arr[7]);
+				patient.setTandCAccepted(arr[8] != null ? Integer.valueOf(arr[8]) : null);
+				patient.setPatientAddress(arr[9]);
+				patients.add(patient);
+
+			});
+			List<Patient> allPatients = medicalRepository.addAllPatientsGeneric(patients.size(), patients);
+			bufferReader.close();
+			fos.close();
+			return allPatients;
+		} catch (IllegalStateException | IOException e) {
+			e.printStackTrace();
+		}
+		return patients;
+	}
 }

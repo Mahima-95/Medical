@@ -38,8 +38,8 @@ public class MedicalRepository extends AbstractRepository {
 	// generic method of patient
 	@SuppressWarnings("unchecked")
 	@Override
-	public <T> List<T> addAllPatientsGeneric(int n) {
-		return (List<T>) addPatientsInList(n);
+	public <T> List<T> addAllPatientsGeneric(int n, List<Patient> patients) {
+		return (List<T>) addPatientsInList(n, patients);
 	}
 
 	public <T> List<T> addPatient(List<T> t) {

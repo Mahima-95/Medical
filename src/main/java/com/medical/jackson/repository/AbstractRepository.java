@@ -25,7 +25,7 @@ public abstract class AbstractRepository {
 
 	protected abstract List<Patient> addAllPatients(List<Patient> patient);
 
-	protected abstract <T> List<T> addAllPatientsGeneric(int n);
+	protected abstract <T> List<T> addAllPatientsGeneric(int n, List<Patient> patients);
 
 	protected abstract <T> T getAllPatients(Class<T> clazz);
 
@@ -58,39 +58,56 @@ public abstract class AbstractRepository {
 	}
 
 	@SuppressWarnings("unchecked")
-	protected <T> List<T> addPatientsInList(int n) {
+	protected <T> List<T> addPatientsInList(int n, List<Patient> patients) {
 
 		if (GetIDSet.size() > 0) {
 			if (GetIDSet.size() >= n) {
-				setIteratorAndRemoveFromSet();
+				setIteratorAndRemoveFromSet(patients);
 			} else {
-				setIteratorAndRemoveFromSet();
-				setIntoMap(n);
+				setIteratorAndRemoveFromSet(patients);
+				setIntoMap(n, patients);
 			}
 		} else {
-			setIntoMap(n);
+			setIntoMap(n, patients);
 		}
 		return (List<T>) addPatient(Arrays.stream(map.values().toArray()).parallel().collect(Collectors.toList()));
 	}
 
-	private void setIteratorAndRemoveFromSet() {
+	private void setIteratorAndRemoveFromSet(List<Patient> patients) {
 
-		List<Patient> patientList = new ArrayList<Patient>();
 		Iterator<Integer> iterator = GetIDSet.iterator();
-		while (iterator.hasNext()) {
-			patientList.add(setPatient(iterator.next()));
-			iterator.remove();
+		if (patients == null || patients.size() < 1) {
+			List<Patient> patientList = new ArrayList<Patient>();
+			while (iterator.hasNext()) {
+				patientList.add(setPatient(iterator.next()));
+				iterator.remove();
+			}
+			patientList.forEach(x -> map.put(x.getId(), x));
+		} else {
+			while (iterator.hasNext()) {
+				for (int j = 0; j <= patients.size(); j++) {
+					patients.get(j).setId(String.valueOf(iterator.next()));
+				}
+				iterator.remove();
+			}
+			patients.forEach(x -> map.put(x.getId(), x));
 		}
-		patientList.forEach(x -> map.put(x.getId(), x));
 	}
 
-	private void setIntoMap(int n) {
+	private void setIntoMap(int n, List<Patient> patients) {
 
-		List<Patient> patientList = new ArrayList<Patient>();
-		for (int i = map.size() + 1; i <= map.size() + n; i++) {
-			patientList.add(setPatient(i));
+		if (patients == null || patients.isEmpty()) {
+			List<Patient> patientList = new ArrayList<Patient>();
+			for (int i = map.size() + 1; i <= map.size() + n; i++) {
+				patientList.add(setPatient(i));
+			}
+			patientList.forEach(x -> map.put(x.getId(), x));
+		} else {
+			for (int i = map.size() + 1, j = 0; i <= map.size() + n; i++, j++) {
+				patients.get(j).setId(String.valueOf(i));
+			}
+			patients.forEach(x -> map.put(x.getId(), x));
 		}
-		patientList.forEach(x -> map.put(x.getId(), x));
 	}
 
 	private Patient setPatient(int id) {

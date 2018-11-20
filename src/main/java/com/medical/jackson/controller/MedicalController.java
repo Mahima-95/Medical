@@ -66,9 +66,10 @@ public class MedicalController {
 	}
 
 	@RequestMapping(value = "/upload", method = RequestMethod.POST)
-	public void uploadDocument(@RequestParam("file") MultipartFile file) {
+	public List<Patient> uploadDocument(@RequestParam("file") MultipartFile file) {
 
 		System.out.println(file);
+		return medicalService.uploadDocument(file);
 	}
 
 	// generic method of delete Patient by Id
